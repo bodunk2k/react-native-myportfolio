@@ -24,6 +24,10 @@ class Phone extends Component {
         this.renderInfo = this.renderInfo.bind(this);
     }
 
+    static navigationOptions = {
+        title: 'Phone Lookup'
+    };
+
     updateInfo() {
         
         console.log(this.state.phoneNumber);
@@ -84,9 +88,7 @@ class Phone extends Component {
             );
     }
 
-    static navigationOptions = {
-        title: 'Phone Lookup'
-    };
+
     render() {
         return (
             <View style={styles.container}>
@@ -111,18 +113,25 @@ let styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         padding: 20,
+        fontSize: 25,
+        fontWeight: 'bold',
         paddingTop: 60
     },
     info: {
         // width: 200,
         borderRadius: 5,
         backgroundColor: "#f0f0f0",
+        fontSize: 20,
+        fontWeight: 'bold',
         padding: 10,
         marginTop: 20
     },
     button: {
         marginTop: 20,
-        padding: 10
+        padding: 20,
+        fontSize: 20,
+        fontWeight: 'bold',
+        backgroundColor: 'grey'
     }
 });
 export default  connect(null, mapDispatchToProps)(Phone);

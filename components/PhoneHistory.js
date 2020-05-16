@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import {connect} from 'react-redux';
-import { GET_PHONELOOKEUP } from '../redux/ActionTypes';
+
 
 class PhoneHistory extends Component  {
 
@@ -14,11 +14,12 @@ class PhoneHistory extends Component  {
     WholeList() {
         return this.props.history.map(function(hist, i){
           return(
-            <View key={i}>
-              <Text>{hist.caller_name}</Text>
+            <View  key={i}>
+              <Text style={styles.TextStyle}>{hist.caller_name}</Text>
               <View>
-                <Text>{hist.phoneNumber}</Text>
+                <Text style={styles.TextStyle}>{hist.phoneNumber}</Text>
               </View>
+              <Text></Text>
             </View>
           );
         });
@@ -39,7 +40,8 @@ class PhoneHistory extends Component  {
                 </Text>
                 <Text>
                 {this.props.history.phoneNumber}
-                </Text> */
+                </Text> 
+                style={styles.MainContainer}*/
         
 }
 function mapStateToProps(state){
@@ -51,13 +53,17 @@ function mapStateToProps(state){
  
         MainContainer: {
           flex: 1,
-          margin: 10
+          margin: 10,
+          fontSize: 20,
+          fontWeight: 'bold',
           
         },
         
         TextStyle:{
-          fontSize : 25,
-           textAlign: 'center'
+          fontSize : 35,
+           textAlign: 'center',
+           fontSize: 20,
+        fontWeight: 'bold',
         }
         
        });
