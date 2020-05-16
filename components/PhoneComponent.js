@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { ListItem } from 'react-native-elements';
 import PhoneInput from 'react-native-phone-input';
+import {connect} from 'react-redux';
 
+function mapDispatchToProps(dispatch){
+    return {
+        addHistory : (history) => dispatch({type:'ADD_PHONELOOKUP',history:history})
+    }
+}
 class Phone extends Component {
     constructor() {
         super();
@@ -10,7 +15,9 @@ class Phone extends Component {
         this.state = {
             valid: "",
             type: "",
-            value: ""
+            value: "",
+            caller_name: "",
+            phoneNumber: ""
         };
 
         this.updateInfo = this.updateInfo.bind(this);
@@ -18,12 +25,9 @@ class Phone extends Component {
     }
 
     updateInfo() {
-        this.setState({
-            valid: this.phone.isValidNumber(),
-            type: this.phone.getNumberType(),
-            value: this.phone.getValue()
-        });
-        fetch("https://twilio-lookup.p.rapidapi.com/PhoneNumbers/caller-name?phoneNumber=8064353731", {
+        
+        console.log(this.state.phoneNumber);
+        fetch(`https://twilio-lookup.p.rapidapi.com/PhoneNumbers/caller-name?phoneNumber=${this.state.phoneNumber}`, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "twilio-lookup.p.rapidapi.com",
@@ -33,15 +37,25 @@ class Phone extends Component {
             .then(response => response.json())
             .then(response => {
                 console.log(response);
+                this.props.addHistory({
+                    phoneNumber: response.phoneNumber,
+                    caller_name: response.callerName.caller_name
+                });
                 console.log(response.callerName.caller_name);
+                this.setState({
+                phoneNumber: response.phoneNumber,
+                caller_name: response.callerName.caller_name
+            });
             })
             .catch(err => {
                 console.log(err);
             });
+            
+            
     }
 
     renderInfo() {
-        if (this.state.value) {
+        
             return (
                 <View style={styles.info}>
                     <Text>
@@ -57,26 +71,33 @@ class Phone extends Component {
                         Value:{" "}
                         <Text style={{ fontWeight: "bold" }}>{this.state.value}</Text>
                     </Text>
+                    <Text>
+                        Value:{" "}
+                        <Text style={{ fontWeight: "bold" }}>{this.state.caller_name}</Text>
+                    </Text>
+                    <Text>
+                        Value:{" "}
+                        <Text style={{ fontWeight: "bold" }}>{this.state.phoneNumber}</Text>
+                    </Text>
+
                 </View>
             );
-        }
     }
 
     static navigationOptions = {
         title: 'Phone Lookup'
     };
     render() {
-
         return (
             <View style={styles.container}>
                 <PhoneInput
-                    ref={ref => {
-                        this.phone = ref;
-                    }}
+                    onChangePhoneNumber={phoneNumber => this.setState({phoneNumber})}
                 />
-
-                <TouchableOpacity onPress={this.updateInfo} style={styles.button}>
-                    <Text>Get Info</Text>
+                <TouchableOpacity onPress={
+                    this.updateInfo
+                    } 
+                    style={styles.button}>
+                    <Text>Touch Me to Get Info</Text>
                 </TouchableOpacity>
 
                 {this.renderInfo()}
@@ -104,4 +125,4 @@ let styles = StyleSheet.create({
         padding: 10
     }
 });
-export default Phone;
+export default  connect(null, mapDispatchToProps)(Phone);

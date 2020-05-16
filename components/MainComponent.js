@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import Home from './HomeComponent';
 import Experience from './ExperienceComponent';
-import PhoneLookup from './PhoneComponent';
+import PhoneScreen from '../screens/PhoneScreen';
 import PhoneHistory from './PhoneHistory';
-import { View, Platform } from 'react-native';
+import PhoneHistoryScreen from '../screens/PhoneHistoryScreen';
+import { View, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+import { Provider } from 'react-redux';
+import {store} from '../redux/store';
 
 const ExperienceNavigator = createStackNavigator(
     {
@@ -43,9 +46,10 @@ const HomeNavigator = createStackNavigator(
 
 const PhoneNavigator = createStackNavigator(
     {
-        PhoneLookup: { screen: PhoneLookup}
+        PhoneLookup: { screen: PhoneScreen}
     },
     {
+        InitialRouteName: 'Phone Lookup',
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#5637DD'
@@ -60,9 +64,10 @@ const PhoneNavigator = createStackNavigator(
 
 const PhoneHistNavigator = createStackNavigator(
     {
-        PhoneHistory: { screen: PhoneHistory }
+        PhoneHistory: { screen: PhoneHistoryScreen }
     },
     {
+        InitialRouteName: 'Phone Lookup History',
         navigationOptions: {
             headerStyle: {
                 backgroundColor: '#5637DD'
@@ -93,7 +98,10 @@ class Main extends Component {
                     flex: 1,
                     paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight
                     }}>
-                    <MainNavigator/>       
+                      
+                    <Provider store={store}>
+                        <MainNavigator/>  
+                    </Provider>     
                 </View>
             );
         }
